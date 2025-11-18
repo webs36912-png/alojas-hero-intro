@@ -1,14 +1,11 @@
 import { Menu } from "lucide-react";
 import heroBackground from "@/assets/hero-background.png";
-
 const Index = () => {
-  return (
-    <div className="relative min-h-screen w-full overflow-hidden">
+  return <div className="relative min-h-screen w-full overflow-hidden">
       {/* Background Image with Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${heroBackground})` }}
-      >
+      <div className="absolute inset-0 bg-cover bg-center" style={{
+      backgroundImage: `url(${heroBackground})`
+    }}>
         <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]" />
       </div>
 
@@ -32,19 +29,16 @@ const Index = () => {
             </h2>
             
             <p className="font-sans text-xl md:text-2xl text-white/95 text-shadow max-w-2xl mx-auto font-light">
-              Alojas crea flats elegantes para mujeres que viven el día a día con comodidad y estilo.
-            </p>
+          </p>
             
             <div className="pt-4">
-              <button className="bg-wine hover:bg-wine-dark text-white font-sans font-medium px-10 py-4 rounded-full text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105">
+              <button className="bg-wine hover:bg-wine-dark text-white font-sans font-medium px-10 rounded-full text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 my-0 py-[10px]">
                 Ver colección
               </button>
             </div>
           </div>
         </main>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
