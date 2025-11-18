@@ -6,7 +6,7 @@ const Index = () => {
       <div className="absolute inset-0 bg-cover bg-center" style={{
       backgroundImage: `url(${heroBackground})`
     }}>
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-black/5" />
       </div>
 
       {/* Content */}
