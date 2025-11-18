@@ -141,3 +141,17 @@ All colors MUST be HSL.
     transform: translateY(0);
   }
 }
+
+/* ScrollReveal styles */
+.scroll-reveal {
+  width: 100%;
+}
+
+.scroll-reveal-text {
+  line-height: 1.2;
+}
+
+.scroll-reveal .word {
+  display: inline-block;
+  margin-right: 0.25em;
+}
