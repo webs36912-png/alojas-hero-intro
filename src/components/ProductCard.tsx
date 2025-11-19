@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface ProductCardProps {
   image: string;
@@ -10,11 +10,10 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ image, name, price, productId }: ProductCardProps) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    // Placeholder for product navigation
-    console.log(`Navigating to product: ${productId}`);
+    navigate(`/producto/${productId}`);
   };
 
   return (

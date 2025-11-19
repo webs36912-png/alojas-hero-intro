@@ -1,4 +1,4 @@
-import { Menu, Mail, Phone, MapPin, Instagram, Facebook } from "lucide-react";
+import { Mail, Phone, MapPin, Instagram, Facebook } from "lucide-react";
 import { useState, useEffect } from "react";
 import heroBackground from "@/assets/hero-background.png";
 import historiaImage from "@/assets/historia-image.png";
@@ -9,6 +9,8 @@ import productEleganteRouge from "@/assets/product-elegante-rouge.jpg";
 import productSophistique from "@/assets/product-sophistique.jpg";
 import productVelvetLuxe from "@/assets/product-velvet-luxe.jpg";
 import { Button } from "@/components/ui/button";
+import MobileMenu from "@/components/MobileMenu";
+import CartIcon from "@/components/CartIcon";
 const Index = () => {
   const [showStickyMenu, setShowStickyMenu] = useState(false);
 
@@ -31,9 +33,10 @@ const Index = () => {
       >
         <div className="container mx-auto px-6 py-3 flex items-center justify-between">
           <h1 className="font-serif text-xl font-semibold tracking-wide">ALOJAS</h1>
-          <button className="text-foreground hover:opacity-70 transition-opacity">
-            <Menu size={24} />
-          </button>
+          <div className="flex items-center gap-4">
+            <CartIcon />
+            <MobileMenu variant="sticky" />
+          </div>
         </div>
       </header>
 
@@ -52,9 +55,10 @@ const Index = () => {
           <header className="fade-in pt-8 px-4 flex justify-center">
             <div className="bg-white/95 backdrop-blur-sm rounded-2xl px-8 py-4 flex items-center justify-between max-w-md w-full shadow-lg">
               <h1 className="font-serif text-2xl font-semibold tracking-wide">ALOJAS</h1>
-              <button className="text-foreground hover:opacity-70 transition-opacity">
-                <Menu size={24} />
-              </button>
+              <div className="flex items-center gap-4">
+                <CartIcon />
+                <MobileMenu variant="hero" />
+              </div>
             </div>
           </header>
 
@@ -73,7 +77,7 @@ const Index = () => {
       </div>
 
       {/* Historia Section - Continuous Scroll */}
-      <section className="min-h-screen bg-white py-24">
+      <section id="historia" className="min-h-screen bg-white py-24">
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-20 items-center max-w-7xl mx-auto">
             {/* Left Side - Editorial Style Image with Square Borders and Depth */}
@@ -124,7 +128,7 @@ const Index = () => {
       </section>
 
       {/* Catálogo Section - Wine Background */}
-      <section className="min-h-screen py-24 relative" style={{
+      <section id="coleccion" className="min-h-screen py-24 relative" style={{
         backgroundColor: '#722F37',
         boxShadow: 'inset 0 2px 20px rgba(0,0,0,0.15), inset 0 -2px 20px rgba(0,0,0,0.1)'
       }}>
@@ -168,7 +172,7 @@ const Index = () => {
       </section>
 
       {/* Contacto Section - White Background */}
-      <section className="min-h-screen bg-white py-32 animate-fade-in">
+      <section id="contacto" className="min-h-screen bg-white py-32 animate-fade-in">
         <div className="container mx-auto px-6">
           <div className="max-w-7xl mx-auto">
             <div className="grid md:grid-cols-3 gap-20">
