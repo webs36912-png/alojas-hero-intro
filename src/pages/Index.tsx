@@ -3,6 +3,11 @@ import { useState, useEffect } from "react";
 import heroBackground from "@/assets/hero-background.png";
 import historiaImage from "@/assets/historia-image.png";
 import ScrollReveal from "@/components/ScrollReveal";
+import ProductCard from "@/components/ProductCard";
+import productClasicoParis from "@/assets/product-clasico-paris.jpg";
+import productEleganteRouge from "@/assets/product-elegante-rouge.jpg";
+import productSophistique from "@/assets/product-sophistique.jpg";
+import productVelvetLuxe from "@/assets/product-velvet-luxe.jpg";
 const Index = () => {
   const [showStickyMenu, setShowStickyMenu] = useState(false);
 
@@ -113,6 +118,50 @@ const Index = () => {
                 </ScrollReveal>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Catálogo Section - Wine Background */}
+      <section className="min-h-screen py-24 relative" style={{
+        backgroundColor: '#722F37',
+        boxShadow: 'inset 0 2px 20px rgba(0,0,0,0.15), inset 0 -2px 20px rgba(0,0,0,0.1)'
+      }}>
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16 space-y-4">
+            <h2 className="font-serif text-5xl md:text-6xl font-bold text-white">
+              Nuestra Colección
+            </h2>
+            <p className="font-sans text-xl text-white/90 max-w-2xl mx-auto font-light">
+              Mocasines artesanales que combinan estilo y comodidad
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            <ProductCard
+              image={productClasicoParis}
+              name="Clásico Paris"
+              price="$89.00"
+              productId="clasico-paris"
+            />
+            <ProductCard
+              image={productEleganteRouge}
+              name="Elegante Rouge"
+              price="$95.00"
+              productId="elegante-rouge"
+            />
+            <ProductCard
+              image={productSophistique}
+              name="Sophistiqué"
+              price="$92.00"
+              productId="sophistique"
+            />
+            <ProductCard
+              image={productVelvetLuxe}
+              name="Velvet Luxe"
+              price="$105.00"
+              productId="velvet-luxe"
+            />
           </div>
         </div>
       </section>
