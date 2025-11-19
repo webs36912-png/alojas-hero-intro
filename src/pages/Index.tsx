@@ -1,4 +1,4 @@
-import { Menu } from "lucide-react";
+import { Menu, Mail, Phone, MapPin, Instagram, Facebook } from "lucide-react";
 import { useState, useEffect } from "react";
 import heroBackground from "@/assets/hero-background.png";
 import historiaImage from "@/assets/historia-image.png";
@@ -8,6 +8,7 @@ import productClasicoParis from "@/assets/product-clasico-paris.jpg";
 import productEleganteRouge from "@/assets/product-elegante-rouge.jpg";
 import productSophistique from "@/assets/product-sophistique.jpg";
 import productVelvetLuxe from "@/assets/product-velvet-luxe.jpg";
+import { Button } from "@/components/ui/button";
 const Index = () => {
   const [showStickyMenu, setShowStickyMenu] = useState(false);
 
@@ -162,6 +163,100 @@ const Index = () => {
               price="$105.00"
               productId="velvet-luxe"
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Contacto Section - White Background */}
+      <section className="min-h-screen bg-white py-32 animate-fade-in">
+        <div className="container mx-auto px-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-20">
+              {/* Columna 1 - Marca */}
+              <div className="space-y-6">
+                <h2 className="font-serif text-4xl font-bold text-[#111111] mb-4">
+                  ALOJAS
+                </h2>
+                <p className="font-sans text-lg text-[#111111]/70 leading-relaxed font-light">
+                  Zapatos inspirados en Francia y fabricados con manos mexicanas para tu día a día.
+                </p>
+              </div>
+
+              {/* Columna 2 - Contacto */}
+              <div className="space-y-6">
+                <h3 className="font-serif text-2xl font-semibold text-[#111111] mb-6">
+                  Contacto
+                </h3>
+                <div className="space-y-4">
+                  <a 
+                    href="mailto:hola@alojas.com" 
+                    className="flex items-center gap-3 text-[#111111]/70 hover:text-[#722F37] transition-colors group"
+                  >
+                    <Mail size={20} className="flex-shrink-0" />
+                    <span className="font-sans">hola@alojas.com</span>
+                  </a>
+                  <a 
+                    href="tel:+525512345678" 
+                    className="flex items-center gap-3 text-[#111111]/70 hover:text-[#722F37] transition-colors group"
+                  >
+                    <Phone size={20} className="flex-shrink-0" />
+                    <span className="font-sans">+52 55 1234 5678</span>
+                  </a>
+                  <div className="pt-4">
+                    <Button 
+                      className="w-full bg-[#722F37] hover:bg-[#5a2529] text-white font-sans"
+                      onClick={() => window.open('https://wa.me/525512345678', '_blank')}
+                    >
+                      Escríbenos por WhatsApp
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Columna 3 - Sucursales & Redes */}
+              <div className="space-y-6">
+                <h3 className="font-serif text-2xl font-semibold text-[#111111] mb-6">
+                  Sucursales & Redes
+                </h3>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 text-[#111111]/70">
+                    <MapPin size={20} className="flex-shrink-0" />
+                    <span className="font-sans">Ciudad de México</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[#111111]/70">
+                    <MapPin size={20} className="flex-shrink-0" />
+                    <span className="font-sans">Guadalajara</span>
+                  </div>
+                  <div className="flex gap-4 pt-4">
+                    <a 
+                      href="https://instagram.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-[#111111]/70 hover:text-[#722F37] transition-colors"
+                      aria-label="Instagram"
+                    >
+                      <Instagram size={24} strokeWidth={1.5} />
+                    </a>
+                    <a 
+                      href="https://facebook.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-[#111111]/70 hover:text-[#722F37] transition-colors"
+                      aria-label="Facebook"
+                    >
+                      <Facebook size={24} strokeWidth={1.5} />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Copyright */}
+            <div className="mt-32 pt-8 border-t border-[#111111]/10">
+              <p className="text-center font-sans text-sm text-[#111111]/50">
+                © 2024 Alojas. Todos los derechos reservados.
+              </p>
+            </div>
           </div>
         </div>
       </section>
