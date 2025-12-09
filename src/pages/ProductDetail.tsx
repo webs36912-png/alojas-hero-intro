@@ -1,81 +1,69 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/contexts/CartContext";
-import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
-import MobileMenu from "@/components/MobileMenu";
 import CartIcon from "@/components/CartIcon";
-
-import productClasicoParis from "@/assets/product-clasico-paris.jpg";
-import productEleganteRouge from "@/assets/product-elegante-rouge.jpg";
-import productSophistique from "@/assets/product-sophistique.jpg";
-import productVelvetLuxe from "@/assets/product-velvet-luxe.jpg";
-
-const products = {
-  "clasico-paris": {
-    id: "clasico-paris",
-    name: "Clásico Paris",
-    price: 89.00,
-    image: productClasicoParis,
-    description: "Mocasines clásicos de inspiración parisina. Elaborados con piel genuina y mano de obra 100% mexicana. Perfectos para cualquier ocasión, combinan elegancia atemporal con comodidad excepcional."
-  },
-  "elegante-rouge": {
-    id: "elegante-rouge",
-    name: "Elegante Rouge",
-    price: 95.00,
-    image: productEleganteRouge,
-    description: "Sofisticación en cada paso. Diseño elegante con acabados de primera calidad. Ideales para eventos especiales o para elevar tu look diario con un toque de distinción francesa."
-  },
-  "sophistique": {
-    id: "sophistique",
-    name: "Sophistiqué",
-    price: 92.00,
-    image: productSophistique,
-    description: "La definición de estilo refinado. Mocasines de corte moderno con influencia vintage. Confeccionados artesanalmente para quienes aprecian el diseño contemporáneo con alma tradicional."
-  },
-  "velvet-luxe": {
-    id: "velvet-luxe",
-    name: "Velvet Luxe",
-    price: 105.00,
-    image: productVelvetLuxe,
-    description: "Lujo en estado puro. Nuestra pieza premium con acabados exclusivos. Materiales de la más alta calidad combinados con técnicas artesanales ancestrales para crear una obra maestra."
-  }
-};
-
-const sizes = ["35", "36", "37", "38", "39", "40", "41", "42"];
+import MobileMenu from "@/components/MobileMenu";
+import { useQuery } from "@tanstack/react-query";
+import { getProductByHandle, ShopifyProduct } from "@/lib/shopify";
+import { useCartStore } from "@/stores/cartStore";
+import { useState } from "react";
 
 const ProductDetail = () => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
-  const { addItem } = useCart();
-  const [selectedSize, setSelectedSize] = useState<string>("");
+  const addItem = useCartStore(state => state.addItem);
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
 
-  const product = productId ? products[productId as keyof typeof products] : null;
+  const { data: product, isLoading, error } = useQuery({
+    queryKey: ['product', productId],
+    queryFn: () => getProductByHandle(productId || ''),
+    enabled: !!productId,
+  });
 
-  if (!product) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="font-serif text-xl">Producto no encontrado</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-accent" />
       </div>
     );
   }
 
+  if (error || !product) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
+        <p className="text-xl text-foreground">Producto no encontrado</p>
+        <Button onClick={() => navigate('/')} variant="outline">
+          Volver al inicio
+        </Button>
+      </div>
+    );
+  }
+
+  const image = product.images.edges[0]?.node;
+  const variants = product.variants.edges;
+  const selectedVariant = variants.find(v => v.node.id === selectedVariantId)?.node || variants[0]?.node;
+
   const handleAddToCart = () => {
-    if (!selectedSize) {
-      toast.error("Por favor selecciona una talla");
+    if (!selectedVariant) {
+      toast.error("Selecciona una opción");
       return;
     }
 
+    const productWrapper: ShopifyProduct = { node: product };
+
     addItem({
-      productId: product.id,
-      name: product.name,
-      price: product.price,
-      size: selectedSize,
-      image: product.image
+      product: productWrapper,
+      variantId: selectedVariant.id,
+      variantTitle: selectedVariant.title,
+      price: selectedVariant.price,
+      quantity: 1,
+      selectedOptions: selectedVariant.selectedOptions,
     });
 
-    toast.success("Producto agregado al carrito");
+    toast.success("Agregado al carrito", {
+      description: `${product.title} - ${selectedVariant.title}`,
+    });
   };
 
   return (
@@ -101,52 +89,69 @@ const ProductDetail = () => {
       <div className="container mx-auto px-6 py-16">
         <div className="grid md:grid-cols-2 gap-16 max-w-6xl mx-auto">
           {/* Product Image */}
-          <div className="aspect-[4/5] overflow-hidden rounded-lg shadow-xl">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-full object-cover"
-            />
+          <div className="aspect-[4/5] overflow-hidden rounded-lg shadow-xl bg-gray-100">
+            {image ? (
+              <img
+                src={image.url}
+                alt={image.altText || product.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                Sin imagen
+              </div>
+            )}
           </div>
 
           {/* Product Info */}
           <div className="space-y-8">
             <div>
               <h1 className="font-serif text-5xl font-bold text-[#111111] mb-4">
-                {product.name}
+                {product.title}
               </h1>
               <p className="font-sans text-3xl text-[#722F37] font-semibold">
-                ${product.price.toFixed(2)}
+                ${parseFloat(selectedVariant?.price.amount || '0').toLocaleString('es-AR')} {selectedVariant?.price.currencyCode}
               </p>
             </div>
 
-            <p className="font-sans text-lg text-[#111111]/70 leading-relaxed">
-              {product.description}
-            </p>
+            {product.description && (
+              <p className="font-sans text-lg text-[#111111]/70 leading-relaxed">
+                {product.description}
+              </p>
+            )}
 
-            {/* Size Selector */}
-            <div className="space-y-4">
-              <label className="font-serif text-xl font-semibold text-[#111111] block">
-                Selecciona tu talla
-              </label>
-              <div className="grid grid-cols-4 gap-3">
-                {sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`
-                      py-3 px-4 border-2 rounded font-sans transition-all
-                      ${selectedSize === size
-                        ? 'border-[#722F37] bg-[#722F37] text-white'
-                        : 'border-gray-300 hover:border-[#722F37] text-[#111111]'
-                      }
-                    `}
-                  >
-                    {size}
-                  </button>
-                ))}
+            {/* Variant Selection */}
+            {variants.length > 1 && (
+              <div className="space-y-4">
+                <label className="font-serif text-xl font-semibold text-[#111111] block">
+                  Selecciona tu opción
+                </label>
+                <div className="flex flex-wrap gap-3">
+                  {variants
+                    .filter(v => v.node.availableForSale)
+                    .map((variant) => {
+                      const isSelected = selectedVariantId === variant.node.id || 
+                        (!selectedVariantId && variant.node.id === variants[0]?.node.id);
+
+                      return (
+                        <button
+                          key={variant.node.id}
+                          onClick={() => setSelectedVariantId(variant.node.id)}
+                          className={`
+                            py-3 px-4 border-2 rounded font-sans transition-all
+                            ${isSelected
+                              ? 'border-[#722F37] bg-[#722F37] text-white'
+                              : 'border-gray-300 hover:border-[#722F37] text-[#111111]'
+                            }
+                          `}
+                        >
+                          {variant.node.title}
+                        </button>
+                      );
+                    })}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Add to Cart Button */}
             <Button
@@ -163,11 +168,9 @@ const ProductDetail = () => {
                   Detalles del producto
                 </h3>
                 <ul className="font-sans text-[#111111]/70 space-y-2">
-                  <li>• Mano de obra 100% mexicana</li>
-                  <li>• Piel genuina de alta calidad</li>
-                  <li>• Diseño inspirado en la elegancia francesa</li>
-                  <li>• Suela antiderrapante</li>
-                  <li>• Plantilla acolchada para mayor comodidad</li>
+                  <li>• Envío gratis en pedidos mayores a $50.000</li>
+                  <li>• Cambios y devoluciones dentro de 30 días</li>
+                  <li>• Cuero genuino de primera calidad</li>
                 </ul>
               </div>
             </div>

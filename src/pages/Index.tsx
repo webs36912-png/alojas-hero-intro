@@ -1,18 +1,22 @@
-import { Mail, Phone, MapPin, Instagram, Facebook } from "lucide-react";
+import { Mail, Phone, MapPin, Instagram, Facebook, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import heroBackground from "@/assets/hero-background.png";
 import historiaImage from "@/assets/historia-image.png";
 import ScrollReveal from "@/components/ScrollReveal";
 import ProductCard from "@/components/ProductCard";
-import productClasicoParis from "@/assets/product-clasico-paris.jpg";
-import productEleganteRouge from "@/assets/product-elegante-rouge.jpg";
-import productSophistique from "@/assets/product-sophistique.jpg";
-import productVelvetLuxe from "@/assets/product-velvet-luxe.jpg";
 import { Button } from "@/components/ui/button";
 import MobileMenu from "@/components/MobileMenu";
 import CartIcon from "@/components/CartIcon";
+import { getProducts } from "@/lib/shopify";
+
 const Index = () => {
   const [showStickyMenu, setShowStickyMenu] = useState(false);
+
+  const { data: products, isLoading, error } = useQuery({
+    queryKey: ['products'],
+    queryFn: () => getProducts(20),
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -142,32 +146,29 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
-            <ProductCard
-              image={productClasicoParis}
-              name="Clásico Paris"
-              price="$89.00"
-              productId="clasico-paris"
-            />
-            <ProductCard
-              image={productEleganteRouge}
-              name="Elegante Rouge"
-              price="$95.00"
-              productId="elegante-rouge"
-            />
-            <ProductCard
-              image={productSophistique}
-              name="Sophistiqué"
-              price="$92.00"
-              productId="sophistique"
-            />
-            <ProductCard
-              image={productVelvetLuxe}
-              name="Velvet Luxe"
-              price="$105.00"
-              productId="velvet-luxe"
-            />
-          </div>
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-white" />
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-white/80">
+                No se pudieron cargar los productos
+              </p>
+            </div>
+          ) : products && products.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+              {products.map((product) => (
+                <ProductCard key={product.node.id} product={product} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-white/80">
+                No hay productos disponibles
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
